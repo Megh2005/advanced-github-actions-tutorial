@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security disclosures
+    url: https://github.com/Megh2005/advanced-github-actions-tutorial/security/policy
+    about: Please report security issues using the SECURITY.md policy.
+  - name: Support and questions
+    url: https://github.com/Megh2005/advanced-github-actions-tutorial/blob/main/SUPPORT.md
+    about: Use SUPPORT.md for troubleshooting and support channels.

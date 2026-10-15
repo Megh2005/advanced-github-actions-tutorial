@@ -1,0 +1,27 @@
+{
+  "name": "advanced-github-actions-tutorial",
+  "version": "1.0.0",
+  "description": "Static random-string demo with advanced GitHub Actions workflows and governance.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "rm -rf dist && mkdir -p dist && cp index.html styles.css script.js dist/",
+    "format:check": "node scripts/format-check.mjs",
+    "lint": "npm run lint:js && npm run lint:html && npm run lint:css",
+    "lint:css": "node scripts/validate-css.mjs",
+    "lint:html": "node scripts/validate-html.mjs",
+    "lint:js": "node --check script.js && node --check tests/random.test.js",
+    "test": "node --test tests/random.test.js",
+    "check:links": "node scripts/link-check.mjs",
+    "check": "npm run format:check && npm run lint && npm test",
+    "validate:secrets": "node scripts/secret-scan.mjs"
+  },
+  "keywords": [
+    "github-actions",
+    "tutorial",
+    "static-site",
+    "security"
+  ],
+  "author": "Megh2005",
+  "license": "MIT"
+}

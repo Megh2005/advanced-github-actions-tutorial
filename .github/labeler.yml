@@ -1,0 +1,26 @@
+application:
+  - changed-files:
+      - any-glob-to-any-file:
+          - index.html
+          - styles.css
+          - script.js
+          - tests/**
+
+documentation:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/*.md"
+          - docs/**
+
+github-actions:
+  - changed-files:
+      - any-glob-to-any-file:
+          - .github/workflows/**
+          - .github/labeler.yml
+
+config:
+  - changed-files:
+      - any-glob-to-any-file:
+          - .github/**
+          - package.json
+          - package-lock.json

@@ -1,0 +1,5 @@
+# Repository-wide ownership for review routing.
+* @Megh2005
+
+# Workflow and governance files require owner review.
+.github/ @Megh2005

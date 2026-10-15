@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  merge_group:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    uses: ./.github/workflows/reusable-validate.yml
+    permissions:
+      contents: read
+    with:
+      node-version: "20"
+      run-link-check: true
+      upload-artifact-name: ci-site-dist
+
+  validate-static-content:
+    name: Static file checks
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: HTML/CSS/JS validation
+        run: npm run lint:html && npm run lint:css && npm run lint:js
+
+      - name: Build distribution
+        run: npm run build
+
+      - name: Upload static build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: static-dist
+          path: dist
+          if-no-files-found: error
+
+      - name: Job summary
+        run: |
+          {
+            echo "## CI Summary"
+            echo "- Reusable validation completed via workflow_call"
+            echo "- Static lint checks passed"
+            echo "- Tests and build outputs were uploaded as artifacts"
+          } >> "$GITHUB_STEP_SUMMARY"
