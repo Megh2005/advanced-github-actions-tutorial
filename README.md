@@ -39,6 +39,7 @@ Open `index.html` directly in a browser for local demo usage.
 See [docs/WORKFLOWS.md](docs/WORKFLOWS.md) for details.
 
 - `ci.yml`
+- `ci-security-lab.yml` (manual static checks for disabled training examples)
 - `reusable-validate.yml`
 - `security.yml`
 - `deploy-pages.yml`
@@ -46,6 +47,26 @@ See [docs/WORKFLOWS.md](docs/WORKFLOWS.md) for details.
 - `scheduled-maintenance.yml`
 - `pr-automation.yml`
 - `pr-governance.yml`
+
+## CI security anti-patterns lab (safe training only)
+
+This repository includes a **non-production training lab** for CI security review practice:
+
+- Lab guide: [docs/CI_SECURITY_LAB.md](docs/CI_SECURITY_LAB.md)
+- Disabled examples: `.github/labs/*.yml.disabled`
+- Guardrail workflow: `.github/workflows/ci-security-lab.yml` (`workflow_dispatch` only)
+
+> ⚠️ Public safety warning: this public repository intentionally does **not** include live vulnerable workflows.
+> Lab examples are intentionally disabled and must remain disabled unless reviewed in a private, isolated test setup.
+
+### Safe testing checklist (private/disposable only)
+
+- [ ] Use a private fork or disposable local runner.
+- [ ] Keep lab workflows disabled by default.
+- [ ] Use fake/demo credentials only (never real or production secrets).
+- [ ] Keep token permissions read-only unless strictly required for a controlled test.
+- [ ] Do not run untrusted PR code under `pull_request_target` with write permissions.
+- [ ] Tear down temporary credentials and test infrastructure after exercises.
 
 ## Security model
 

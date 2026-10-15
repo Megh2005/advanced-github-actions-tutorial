@@ -1,0 +1,25 @@
+# ======================================================================
+# TRAINING LAB ONLY — INTENTIONALLY DISABLED
+# This file must NEVER be copied to production without full security review.
+# It demonstrates a CI security anti-pattern and a safer replacement.
+# ======================================================================
+
+name: "LAB ONLY: pull_request_target checkout anti-pattern"
+
+# Anti-pattern (illustrative only, DO NOT ENABLE):
+# on:
+#   pull_request_target:
+# jobs:
+#   dangerous:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v4
+#         with:
+#           # Untrusted ref from fork/PR head in base repo context.
+#           ref: ${{ github.event.pull_request.head.sha }}
+#       - run: echo "This is unsafe in pull_request_target"
+
+# Safer pattern guidance:
+# - Keep pull_request_target for metadata-only tasks (labels/comments/API checks).
+# - Use pull_request for building/testing untrusted code from PR heads.
+# - Keep permissions least-privilege and avoid secret access for untrusted code.

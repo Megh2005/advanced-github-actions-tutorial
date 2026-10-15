@@ -1,0 +1,18 @@
+# ======================================================================
+# TRAINING LAB ONLY — INTENTIONALLY DISABLED
+# This file must NEVER be copied to production without full security review.
+# It demonstrates unpinned third-party action usage.
+# ======================================================================
+
+name: "LAB ONLY: unpinned action anti-pattern"
+
+# Anti-pattern (illustrative only, DO NOT ENABLE):
+# steps:
+#   - uses: third-party/example-action@v1
+#   - run: echo "Tag-based references can move unexpectedly"
+
+# Safer pattern guidance:
+# - Pin third-party actions to full commit SHA.
+# - Example:
+#   uses: third-party/example-action@0123456789abcdef0123456789abcdef01234567
+# - Review and rotate pins on a controlled cadence.

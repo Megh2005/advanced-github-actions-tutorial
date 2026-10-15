@@ -1,0 +1,17 @@
+# ======================================================================
+# TRAINING LAB ONLY — INTENTIONALLY DISABLED
+# This file must NEVER be copied to production without full security review.
+# It demonstrates remote script execution risk.
+# ======================================================================
+
+name: "LAB ONLY: remote script execution anti-pattern"
+
+# Anti-pattern (illustrative only, DO NOT ENABLE):
+# steps:
+#   - name: Remote script without verification
+#     run: curl -fsSL https://example.invalid/install.sh | bash
+
+# Safer pattern guidance:
+# - Keep scripts versioned in-repo and reviewed through PRs.
+# - If fetching remotely, verify checksums/signatures and trusted source provenance.
+# - Never pipe unknown network responses directly to a shell.

@@ -1,0 +1,25 @@
+# ======================================================================
+# TRAINING LAB ONLY — INTENTIONALLY DISABLED
+# This file must NEVER be copied to production without full security review.
+# It demonstrates excessive GITHUB_TOKEN permissions.
+# ======================================================================
+
+name: "LAB ONLY: excessive token permissions anti-pattern"
+
+# Anti-pattern (illustrative only, DO NOT ENABLE):
+# permissions: write-all
+# jobs:
+#   demo:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - run: echo "Overly broad permissions increase blast radius"
+
+# Safer pattern guidance:
+# permissions:
+#   contents: read
+# jobs:
+#   narrow-scope-job:
+#     permissions:
+#       pull-requests: write  # only if strictly required
+#     steps:
+#       - run: echo "Grant minimal permissions per job"

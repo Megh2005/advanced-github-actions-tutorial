@@ -1,0 +1,79 @@
+name: CI Security Lab Guardrails
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-security-lab-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  validate-disabled-labs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Verify required disabled lab files exist
+        run: |
+          set -euo pipefail
+          required=(
+            ".github/labs/pull-request-target-checkout.yml.disabled"
+            ".github/labs/untrusted-shell-input.yml.disabled"
+            ".github/labs/excessive-permissions.yml.disabled"
+            ".github/labs/unpinned-action.yml.disabled"
+            ".github/labs/remote-script-execution.yml.disabled"
+            ".github/labs/unsafe-artifact.yml.disabled"
+          )
+          for file in "${required[@]}"; do
+            if [[ ! -f "$file" ]]; then
+              echo "Missing required lab file: $file" >&2
+              exit 1
+            fi
+          done
+
+      - name: Ensure lab examples remain disabled
+        run: |
+          set -euo pipefail
+          while IFS= read -r -d '' file; do
+            if [[ ! "$file" =~ \.yml\.disabled$ && ! "$file" =~ \.yaml\.example$ ]]; then
+              echo "Unsafe lab extension detected: $file" >&2
+              exit 1
+            fi
+          done < <(find .github/labs -maxdepth 1 -type f -print0)
+
+      - name: Fail if any lab file appears as active workflow
+        run: |
+          set -euo pipefail
+          for name in \
+            pull-request-target-checkout \
+            untrusted-shell-input \
+            excessive-permissions \
+            unpinned-action \
+            remote-script-execution \
+            unsafe-artifact; do
+            if [[ -f ".github/workflows/${name}.yml" || -f ".github/workflows/${name}.yaml" ]]; then
+              echo "Lab file was promoted to active workflow: ${name}" >&2
+              exit 1
+            fi
+          done
+
+      - name: Validate mandatory warning banner in each lab file
+        run: |
+          set -euo pipefail
+          for file in .github/labs/*; do
+            grep -q "TRAINING LAB ONLY" "$file"
+            grep -q "must NEVER be copied to production" "$file"
+          done
+
+      - name: Summarize static-only validation
+        run: |
+          {
+            echo "### CI Security Lab"
+            echo "- Trigger: manual only (workflow_dispatch)"
+            echo "- Permissions: contents: read"
+            echo "- Validation: static file checks only"
+          } >> "$GITHUB_STEP_SUMMARY"
