@@ -73,7 +73,7 @@ jobs:
 
       - name: Upload artifact
         if: ${{ matrix.node == fromJSON(inputs.node-version) }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ inputs.upload-artifact-name }}
           path: dist
