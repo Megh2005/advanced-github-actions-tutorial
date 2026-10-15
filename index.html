@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Accessible random string generator demo used for advanced GitHub Actions tutorials."
+    />
+    <title>Advanced GitHub Actions Tutorial Demo</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="container" aria-labelledby="app-title">
+      <header>
+        <h1 id="app-title">Cryptographically Secure Random String Demo</h1>
+        <p>
+          Generate a strong random string manually or on a timed interval. This static app is paired with
+          advanced GitHub Actions workflows for CI/CD and governance tutorials.
+        </p>
+      </header>
+
+      <section class="card" aria-labelledby="controls-heading">
+        <h2 id="controls-heading">Generator controls</h2>
+
+        <div class="field-grid">
+          <label for="length-input">String length</label>
+          <input
+            id="length-input"
+            name="length"
+            type="number"
+            min="8"
+            max="128"
+            value="32"
+            inputmode="numeric"
+            aria-describedby="length-help"
+          />
+          <p id="length-help" class="hint">Choose 8 to 128 characters.</p>
+
+          <label for="interval-input">Auto-refresh interval (seconds)</label>
+          <input
+            id="interval-input"
+            name="interval"
+            type="number"
+            min="5"
+            max="600"
+            value="15"
+            inputmode="numeric"
+            aria-describedby="interval-help"
+          />
+          <p id="interval-help" class="hint">Generates a new value every 5 to 600 seconds.</p>
+        </div>
+
+        <div class="button-row" role="group" aria-label="Generator actions">
+          <button id="generate-btn" type="button">Generate now</button>
+          <button id="toggle-btn" type="button" aria-pressed="false">Start auto-refresh</button>
+          <button id="copy-btn" type="button">Copy</button>
+          <button id="download-btn" type="button">Download</button>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="output-heading">
+        <h2 id="output-heading">Current random string</h2>
+        <output id="random-output" class="output" aria-live="polite" aria-atomic="true"></output>
+        <p id="status-message" class="status" role="status" aria-live="polite"></p>
+        <p class="hint">
+          Values use <code>crypto.getRandomValues</code> and URL-safe Base64 characters.
+        </p>
+      </section>
+    </main>
+
+    <script type="module" src="script.js"></script>
+  </body>
+</html>

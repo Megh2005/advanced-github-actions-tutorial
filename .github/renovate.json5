@@ -1,0 +1,8 @@
+{
+  // Renovate is scoped to GitHub Actions updates to avoid overlap with Dependabot npm updates.
+  extends: ["config:recommended"],
+  enabledManagers: ["github-actions"],
+  labels: ["dependencies", "renovate"],
+  rangeStrategy: "pin",
+  schedule: ["before 6am on monday"]
+}

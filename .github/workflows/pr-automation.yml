@@ -1,0 +1,55 @@
+name: PR Automation
+
+on:
+  pull_request_target:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  label-and-metadata:
+    runs-on: ubuntu-latest
+    steps:
+      # Security note: pull_request_target runs in the base repository context.
+      # Never check out or execute code from the PR head in this workflow.
+      - name: Apply labels from file patterns
+        uses: actions/labeler@v5
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Add tutorial metadata comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const issue_number = context.payload.pull_request.number;
+            const marker = '<!-- tutorial-pr-automation -->';
+            const body = [
+              marker,
+              'Thanks for contributing to the advanced GitHub Actions tutorial.',
+              '',
+              '- Follow Conventional Commits for commit history',
+              '- Ensure CI and security checks are green before merge',
+              '- Keep workflow and governance docs updated with behavior changes'
+            ].join('\n');
+
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner,
+              repo,
+              issue_number,
+              per_page: 100
+            });
+            const existing = comments.find((comment) => comment.body.includes(marker));
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner,
+                repo,
+                comment_id: existing.id,
+                body
+              });
+            } else {
+              await github.rest.issues.createComment({ owner, repo, issue_number, body });
+            }

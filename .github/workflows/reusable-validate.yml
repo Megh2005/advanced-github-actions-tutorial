@@ -1,0 +1,84 @@
+name: Reusable Validation
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        description: Node.js version to use.
+        required: false
+        default: "20"
+        type: string
+      run-link-check:
+        description: Run markdown local-link checks.
+        required: false
+        default: true
+        type: boolean
+      upload-artifact-name:
+        description: Artifact name for build output.
+        required: false
+        default: site-dist
+        type: string
+    secrets:
+      optional_status_token:
+        required: false
+    outputs:
+      artifact-name:
+        description: Name of the generated artifact.
+        value: ${{ jobs.validate.outputs.artifact-name }}
+
+jobs:
+  validate:
+    name: Validate (${{ matrix.os }} / node-${{ matrix.node }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        node: [18, 20]
+    permissions:
+      contents: read
+    outputs:
+      artifact-name: ${{ steps.artifact-name.outputs.value }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint and format checks
+        run: npm run format:check && npm run lint
+
+      - name: Run tests
+        run: npm test
+
+      - name: Run link checks
+        if: ${{ inputs.run-link-check }}
+        run: npm run check:links
+
+      - name: Build static artifact
+        if: ${{ matrix.node == fromJSON(inputs.node-version) }}
+        run: npm run build
+
+      - name: Set artifact metadata
+        if: ${{ matrix.node == fromJSON(inputs.node-version) }}
+        id: artifact-name
+        run: echo "value=${{ inputs.upload-artifact-name }}" >> "$GITHUB_OUTPUT"
+
+      - name: Upload artifact
+        if: ${{ matrix.node == fromJSON(inputs.node-version) }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.upload-artifact-name }}
+          path: dist
+          if-no-files-found: error
+
+      - name: Optional secret-aware summary
+        if: ${{ matrix.node == fromJSON(inputs.node-version) && secrets.optional_status_token != '' }}
+        run: echo "Optional secret was provided for this reusable workflow invocation." >> "$GITHUB_STEP_SUMMARY"

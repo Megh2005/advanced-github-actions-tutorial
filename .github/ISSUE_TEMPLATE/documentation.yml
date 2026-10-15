@@ -1,0 +1,29 @@
+name: Documentation request
+description: Suggest documentation changes for tutorials, workflows, or governance guides.
+title: "docs: "
+labels:
+  - documentation
+body:
+  - type: textarea
+    id: affected
+    attributes:
+      label: What documentation is affected?
+      description: Include file path(s) and section(s).
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggested
+    attributes:
+      label: Suggested update
+      description: Describe what should be improved.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Confirmations
+      options:
+        - label: I checked existing docs before opening this request.
+          required: true
