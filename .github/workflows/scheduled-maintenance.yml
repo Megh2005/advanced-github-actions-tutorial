@@ -48,7 +48,7 @@ jobs:
 
       - name: Open or update maintenance issue when needed
         if: ${{ steps.quality.outcome == 'failure' || steps.links.outcome == 'failure' || steps.security.outcome == 'failure' }}
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const title = 'Automated maintenance findings';
