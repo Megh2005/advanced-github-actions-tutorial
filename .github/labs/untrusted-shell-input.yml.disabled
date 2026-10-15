@@ -1,0 +1,20 @@
+# ======================================================================
+# TRAINING LAB ONLY — INTENTIONALLY DISABLED
+# This file must NEVER be copied to production without full security review.
+# It demonstrates shell injection risk from untrusted metadata.
+# ======================================================================
+
+name: "LAB ONLY: untrusted shell input anti-pattern"
+
+# Anti-pattern (illustrative only, DO NOT ENABLE):
+# steps:
+#   - name: Unsafe interpolation
+#     run: |
+#       # Title/body can contain shell metacharacters.
+#       echo "Processing PR title: ${{ github.event.pull_request.title }}"
+
+# Safer pattern guidance:
+# - Treat issue/PR metadata as untrusted input.
+# - Avoid direct interpolation into shell commands.
+# - Validate allowed characters and pass values as data, not executable syntax.
+# - Prefer actions/github-script or API clients where possible.

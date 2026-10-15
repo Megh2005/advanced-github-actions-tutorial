@@ -1,0 +1,18 @@
+# ======================================================================
+# TRAINING LAB ONLY — INTENTIONALLY DISABLED
+# This file must NEVER be copied to production without full security review.
+# It demonstrates unsafe artifact handling.
+# ======================================================================
+
+name: "LAB ONLY: unsafe artifact handling anti-pattern"
+
+# Anti-pattern (illustrative only, DO NOT ENABLE):
+# steps:
+#   - uses: actions/download-artifact@v4
+#   - name: Execute downloaded content directly
+#     run: ./artifact-output/run.sh
+
+# Safer pattern guidance:
+# - Validate artifact provenance (source workflow/job/run context).
+# - Verify expected file list and integrity before use.
+# - Treat artifact contents as untrusted unless explicitly attested.
